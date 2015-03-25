@@ -1,0 +1,15 @@
+# This is an example of a unifi controller
+# The file name must be end with .conf
+
+username=admin
+password=password
+baseurl=https://example:8443
+
+# Sites are new features of Unifi Controller >= 3.0, if you have previous version don't touch
+sites=default # If you have multiples sites you can use "sites=defualt clientA clientB" ...
+
+UNIFI_VERSION=3.2.10
+UNIFI_HOSTNAME=example
+
+
+KEEP_BACKUP=10 # Number of stored copies

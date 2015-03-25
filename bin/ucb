@@ -1,0 +1,141 @@
+#!/bin/bash
+#title           : ucb
+#description     : This script make backup of Unifi Controller using the API
+#author          : Israel Santana <isra@miscorreos.org>
+#date            : 20150325
+#version         : 0.1    
+#usage           : ucb
+
+ 
+VERSION=0.1
+SCRIPT=`basename ${BASH_SOURCE[0]}`
+LONG_NAME="Unifi Controller Backup"
+
+# Default options
+CONFIG_FILE=/etc/ucb/config
+DIR_UNIFIS_CONFIG=/etc/ucb/controllers
+VERBOSE=1
+TRUE=0
+
+# Set font for Help
+NORM=`tput sgr0`
+BOLD=`tput bold`
+
+function help {
+  echo -e \\n"Help documentation for ${BOLD}${LONG_NAME}${NORM}, version ${BOLD}${VERSION}${NORM}"\\n
+  echo -e "${BOLD}Basic usage:${NORM} ${BOLD}$SCRIPT${NORM}"\\n
+  echo "Command line switches are optional. The following switches are recognized."
+  echo "  ${BOLD}-c${NORM}  --Sets the config file path. Default file is ${BOLD}${CONFIG_FILE}${NORM}"
+  echo "  ${BOLD}-d${NORM}  --Sets the directory path whith all the controllers config. Default directory is ${BOLD}${DIR_UNIFIS_CONFIG}${NORM}"
+  echo "  ${BOLD}-s${NORM}  --Sets silent mode, is not set by default"
+  echo "  ${BOLD}-v${NORM}  --Sets verboe mode, is not set by default"
+  echo -e "  ${BOLD}-h${NORM}  --Displays this help message. No further functions are performed."\\n
+  echo -e "Example: ${BOLD}$SCRIPT -c ${CONFIG_FILE} -d ${DIR_UNIFIS_CONFIG}"\\n
+  exit 1
+}
+
+
+while getopts c:d:svh OPT; do
+  case "${OPT}" in
+    c)
+      CONFIG_FILE=${OPTARG}
+      ;;
+
+    d)
+      DIR_UNIFIS_CONFIG=${OPTARG}
+      ;;
+    v)
+      set -x
+      ;;
+    h)
+      help
+      ;;
+    \?)
+      help
+      ;;
+  esac
+done
+
+
+
+function get_unifi_controllers {
+  echo $(ls ${DIR_UNIFIS_CONFIG}/*.conf)
+}
+
+function check_backup_requeriments {
+
+  if [ ! -f ${UNIFI_SH_API_PATH} ]; then
+    echo curl -o ${UNIFI_SH_API_PATH} -L ${UNIFI_SH_API_DOWNLOAD_URL}/${UNIFI_VERSION}/${UNIFI_SH_API_BASENAME}
+    curl -o ${UNIFI_SH_API_PATH} -L ${UNIFI_SH_API_DOWNLOAD_URL}/${UNIFI_VERSION}/${UNIFI_SH_API_BASENAME} 
+  fi
+
+  if [ ! -d ${BACKUP_DIR} ] ; then
+   mkdir -p ${BACKUP_DIR}
+  fi
+
+}
+
+function clean_old_backups {
+  NUMBER_OF_COPIES=$(ls -1 ${DELETE_PATERN} | wc -l)
+
+  if [ ${NUMBER_OF_COPIES} -gt ${KEEP_BACKUP} ]; then
+    DELETE=$[${NUMBER_OF_COPIES} - ${KEEP_BACKUP}]
+    ls -1 ${DELETE_PATERN} | head -n $DELETE | xargs rm
+  fi
+}
+
+function get_date {
+  echo $(date +%Y%m%d)
+}
+
+function backup_site {
+  #$1 the name of the controller
+  #$2 is the site for backup
+  
+  DATE=$(get_date)
+
+  site=$2
+
+  source $1
+  source $CONFIG_FILE
+  source ${UNIFI_SH_API_PATH}
+
+  # Check requeriments for this controller
+  check_backup_requeriments
+
+  # Unifi login
+  unifi_login
+
+  # Backup site
+  unifi_backup ${BACKUP_FILENAME}
+
+  # Clean old backups
+  clean_old_backups
+
+  # Logout
+  unifi_logout
+
+}
+function backup_controller {
+  # $1 is the file name which the controller config
+
+  source ${1}
+  source ${CONFIG_FILE}
+  # Backup every site on the controller
+  for site in ${sites}; do
+    backup_site ${1} ${site} 
+  done
+
+}
+
+function main {
+  # Get all the Unifi Controllers
+  CONTROLLERS=$(get_unifi_controllers)
+
+  # Backup every Unifi Controller
+  for CONTROLLER in ${CONTROLLERS}; do
+    backup_controller ${CONTROLLER}
+  done
+}
+
+main
