@@ -51,7 +51,6 @@ $ cat /etc/cron.d/ucb
 
 * Log 
 Logs gives info about backup
-
 ```
 2015-03-26 16:23:01: Starting backup from the file /etc/ucb/controllers/example.conf
 2015-03-26 16:23:01: Finding it sites for example
