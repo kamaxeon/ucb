@@ -12,13 +12,21 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
+# Special case /
+if [ "$PREFIX" == "/" ]; then
+ PREFIX=""
+fi
+
 mkdir -p "$PREFIX"/bin
 mkdir -p "$PREFIX"/etc/ucb
 mkdir -p "$PREFIX"/lib/ucb
 cp -R bin/* "$PREFIX"/bin/
 
+if [ ! -f "$PREFIX"/etc/ucb/config ]; then
+  cp -R etc/config "$PREFIX"/etc/ucb
+fi
 
-cp -R etc/* "$PREFIX"/etc/ucb
+cp -R etc/controllers "$PREFIX"/etc/ucb
 
 echo "Installed Unifi Controller Backup"
 echo "bin/ucb copied to $PREFIX/bin/ucb"
