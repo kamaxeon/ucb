@@ -64,7 +64,6 @@ function get_unifi_controllers {
 function check_backup_requeriments {
 
   if [ ! -f ${UNIFI_SH_API_PATH} ]; then
-    echo curl -o ${UNIFI_SH_API_PATH} -L ${UNIFI_SH_API_DOWNLOAD_URL}/${UNIFI_VERSION}/${UNIFI_SH_API_BASENAME}
     curl -o ${UNIFI_SH_API_PATH} -L ${UNIFI_SH_API_DOWNLOAD_URL}/${UNIFI_VERSION}/${UNIFI_SH_API_BASENAME} 
   fi
 
@@ -88,15 +87,11 @@ function get_date {
 }
 
 function backup_site {
-  #$1 the name of the controller
-  #$2 is the site for backup
-  
+  #$1 is the site for backup
   DATE=$(get_date)
 
-  site=$2
-
-  source $1
-  source $CONFIG_FILE
+  site=${1}
+  source ${CONFIG_FILE}
   source ${UNIFI_SH_API_PATH}
 
   # Check requeriments for this controller
@@ -115,13 +110,14 @@ function backup_site {
   unifi_logout
 
 }
+
 function backup_controller {
   # $1 is the file name which the controller config
 
   source ${1}
   # Backup every site on the controller
   for site in ${SITES}; do
-    backup_site ${1} ${site}
+    backup_site ${site}
   done
 
 }
