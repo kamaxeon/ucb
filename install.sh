@@ -30,7 +30,7 @@ cp -R etc/controllers "$PREFIX"/etc/ucb
 
 echo "Installed Unifi Controller Backup"
 echo "bin/ucb copied to $PREFIX/bin/ucb"
-echo "etc/* copied to $PREFIX/etc"
-echo "Check the ucb config $PREFIX/etc/config"
+echo "etc/* copied to $PREFIX/etc/ucb"
+echo "Check the ucb config $PREFIX/etc/ucb/config"
 echo "You must write your Unifi Controllers definitions in $PREFIX/etc/ucb/controllers"
-echo "Yoy must run \"$PREFIX/bin/ucb -c $PREFIX/etc/config -d $PREFIX/etc/ucb/controllers\""
+echo "Yoy must run \"$PREFIX/bin/ucb -c $PREFIX/etc/ucb/config -d $PREFIX/etc/ucb/controllers\""
