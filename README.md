@@ -21,7 +21,7 @@ Just use install.sh :-)
 
 * Normal use
 ```
-$ ucb # This is equal to "ucb -c /etc/ucb/config -d /etc/ucb/controller"
+$ ucb # This is equal to "ucb -c /etc/ucb/config -d /etc/ucb/controllers"
 ```
 
 * Getting help
