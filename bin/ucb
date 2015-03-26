@@ -74,6 +74,11 @@ function get_unifi_controllers {
 
 function check_backup_requeriments {
 
+  if [ -d ${UNIFI_SH_API_DIR} ]; then
+    write_log "Not exist the unifi_sh_api directory ${UNIFI_SH_API_DIR}, creating it !!!"
+    mkdir -p ${UNIFI_SH_API_DIR}
+  fi
+
   if [ ! -f ${UNIFI_SH_API_PATH} ]; then
     write_log "Not exist the unifi_sh_api version ${UNIFI_VERSION}, downloading it from ${UNIFI_SH_API_DOWNLOAD_URL}/${UNIFI_VERSION}/${UNIFI_SH_API_BASENAME}"
     curl -o ${UNIFI_SH_API_PATH} -L ${UNIFI_SH_API_DOWNLOAD_URL}/${UNIFI_VERSION}/${UNIFI_SH_API_BASENAME} 
