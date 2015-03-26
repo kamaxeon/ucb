@@ -1,5 +1,8 @@
 # Config file of Unifi Controller Backup
 
+# UCB log file
+UCB_LOG_FILE=/home/inerza.loc/isantana/tmp/ucb/log/ucb.log
+
 # Directory where unifi_sh_api will be stored
 UNIFI_SH_API_DIR=/usr/local/lib/ubc
 
