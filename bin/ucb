@@ -61,7 +61,7 @@ function write_log {
    
   # if log file doesn't exist, we create it
   if [ ! -f ${UCB_LOG_FILE} ]; then
-    write_log "Not exist the log file ${BACKUP_DIR}, creating it !!!"
+    write_log "Not exist the log file ${UCB_LOG_FILE}, creating it !!!"
     touch ${UCB_LOG_FILE}
   fi
 
@@ -74,7 +74,7 @@ function get_unifi_controllers {
 
 function check_backup_requeriments {
 
-  if [ -d ${UNIFI_SH_API_DIR} ]; then
+  if [ ! -d ${UNIFI_SH_API_DIR} ]; then
     write_log "Not exist the unifi_sh_api directory ${UNIFI_SH_API_DIR}, creating it !!!"
     mkdir -p ${UNIFI_SH_API_DIR}
   fi
