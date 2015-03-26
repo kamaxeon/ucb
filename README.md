@@ -40,12 +40,39 @@ Command line switches are optional. The following switches are recognized.
 Example: ucb -c /etc/ucb/config -d /etc/ucb/controllers
 ```
 
+* Crontab
+You can use a crontab for regular backup
+```
+$ cat /etc/cron.d/ucb
+# Backup all by Unifi Controller every day at 01:00 a.m.
+00 01 * * * root /bin/ucb 
+
+```
+
+* Log 
+Logs gives info about backup
+
+```
+2015-03-26 16:23:01: Starting backup from the file /etc/ucb/controllers/example.conf
+2015-03-26 16:23:01: Finding it sites for example
+2015-03-26 16:23:01: Hostname: example, Site: default -> Starting
+2015-03-26 16:23:01: Hostname: example, Site: default -> Login
+2015-03-26 16:23:01: Hostname: example, Site: default -> Doing the backup to /var/backups/unifi_controller/20150326-example-default.unf
+2015-03-26 16:23:05: Hostname: example, Site: default -> Size of /var/backups/unifi_controller/20150326-example-default.unf is 2,6M
+2015-03-26 16:23:05: Hostname: example, Site: default -> Cleaning old backups
+2015-03-26 16:23:05: Hostname: example, Site: default -> We must keep 10 backups and we have 1
+2015-03-26 16:23:05: Hostname: example, Site: default -> No old copies to delete
+2015-03-26 16:23:05: Hostname: example, Site: default -> Logout
+2015-03-26 16:23:05: Hostname: example, Site: default -> Finished
+2015-03-26 16:23:05: Finished backup from the file /etc/ucb/controllers/example.conf
+
+```
 
 ## Limitations
 * username defined in a Unifi Controller must have access to all sites defined on it.
 * Sites Name can't contains spaces :-|
 
 ## TODO
-* Logs
+* ~~Logs~~
 * Test
 
