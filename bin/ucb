@@ -61,7 +61,7 @@ function write_log {
    
   # if log file doesn't exist, we create it
   if [ ! -f ${UCB_LOG_FILE} ]; then
-    touch ${UCB_LOG_FILE}
+    touch ${UCB_LOG_FILE} 2> /dev/null
     if [ $? -ne ${TRUE} ]; then
      echo "Can't create log file ${UCB_LOG_FILE}"
      exit 1
@@ -133,7 +133,7 @@ function backup_site {
   # Backup site
   write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Doing the backup to ${BACKUP_FILENAME}"
   unifi_backup ${BACKUP_FILENAME}
-  SIZE=$(du -sh ${BACKUP_FILENAME} | cut -f1)
+  SIZE=$(du -sh ${BACKUP_FILENAME} | cut -f1 2> /dev/null)
   write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Size of ${BACKUP_FILENAME} is ${SIZE}"
 
   # Clean old backups
