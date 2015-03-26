@@ -40,8 +40,7 @@ Command line switches are optional. The following switches are recognized.
 Example: ucb -c /etc/ucb/config -d /etc/ucb/controllers
 ```
 
-* Crontab
-You can use a crontab for regular backup
+* You can use a crontab for regular backup
 ```
 $ cat /etc/cron.d/ucb
 # Backup all by Unifi Controller every day at 01:00 a.m.
@@ -49,8 +48,7 @@ $ cat /etc/cron.d/ucb
 
 ```
 
-* Log 
-Logs gives info about backup
+* Logs gives info about backup
 ```
 2015-03-26 16:23:01: Starting backup from the file /etc/ucb/controllers/example.conf
 2015-03-26 16:23:01: Finding it sites for example
