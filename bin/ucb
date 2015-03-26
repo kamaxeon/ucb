@@ -27,7 +27,6 @@ function help {
   echo "Command line switches are optional. The following switches are recognized."
   echo "  ${BOLD}-c${NORM}  --Sets the config file path. Default file is ${BOLD}${CONFIG_FILE}${NORM}"
   echo "  ${BOLD}-d${NORM}  --Sets the directory path whith all the controllers config. Default directory is ${BOLD}${DIR_UNIFIS_CONFIG}${NORM}"
-  echo "  ${BOLD}-s${NORM}  --Sets silent mode, is not set by default"
   echo "  ${BOLD}-v${NORM}  --Sets verboe mode, is not set by default"
   echo -e "  ${BOLD}-h${NORM}  --Displays this help message. No further functions are performed."\\n
   echo -e "Example: ${BOLD}$SCRIPT -c ${CONFIG_FILE} -d ${DIR_UNIFIS_CONFIG}"\\n
@@ -120,10 +119,9 @@ function backup_controller {
   # $1 is the file name which the controller config
 
   source ${1}
-  source ${CONFIG_FILE}
   # Backup every site on the controller
-  for site in ${sites}; do
-    backup_site ${1} ${site} 
+  for site in ${SITES}; do
+    backup_site ${1} ${site}
   done
 
 }
