@@ -133,6 +133,8 @@ function backup_site {
   # Backup site
   write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Doing the backup to ${BACKUP_FILENAME}"
   unifi_backup ${BACKUP_FILENAME}
+  SIZE=$(du -sh ${BACKUP_FILENAME} | cut -f1)
+  write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Size of ${BACKUP_FILENAME} is ${SIZE}"
 
   # Clean old backups
   write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Cleaning old backups"
