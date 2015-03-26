@@ -3,11 +3,11 @@
 #description     : This script make backup of Unifi Controller using the API
 #author          : Israel Santana <isra@miscorreos.org>
 #date            : 20150325
-#version         : 0.1    
+#version         : 0.2    
 #usage           : ucb
 
  
-VERSION=0.1
+VERSION=0.2
 SCRIPT=`basename ${BASH_SOURCE[0]}`
 LONG_NAME="Unifi Controller Backup"
 
@@ -61,6 +61,7 @@ function write_log {
    
   # if log file doesn't exist, we create it
   if [ ! -f ${UCB_LOG_FILE} ]; then
+    write_log "Not exist the log file ${BACKUP_DIR}, creating it !!!"
     touch ${UCB_LOG_FILE}
   fi
 
@@ -88,12 +89,14 @@ function check_backup_requeriments {
 function clean_old_backups {
   NUMBER_OF_COPIES=$(ls -1 ${DELETE_PATERN} | wc -l)
 
+  write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> We must keep ${KEEP_BACKUP} backups and we have ${NUMBER_OF_COPIES}"
+
   if [ ${NUMBER_OF_COPIES} -gt ${KEEP_BACKUP} ]; then
     DELETE=$[${NUMBER_OF_COPIES} - ${KEEP_BACKUP}]
-    write_log "Hostname: ${BOLD}${UNIFI_HOSTNAME}${NORM}, Site: ${BOLD}${site}${NORM} -> Deleting ${BOLD}${DELETE}${NORM} old copies :-)"
+    write_log "Hostname: ${BOLD}${UNIFI_HOSTNAME}${NORM}, Site: ${site} -> Deleting ${BOLD}${DELETE}${NORM} old copies :-)"
     ls -1 ${DELETE_PATERN} | head -n $DELETE | xargs rm
   else
-    write_log "Hostname: ${BOLD}${UNIFI_HOSTNAME}${NORM}, Site: ${BOLD}${site}${NORM} -> ${BOLD}No${NORM} old copies to delete"
+    write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> No old copies to delete"
   fi
 }
 
@@ -114,15 +117,20 @@ function backup_site {
   source ${UNIFI_SH_API_PATH}
 
   # Unifi login
+  
+  write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Login"
   unifi_login
 
   # Backup site
+  write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Doing the backup to ${BACKUP_FILENAME}"
   unifi_backup ${BACKUP_FILENAME}
 
   # Clean old backups
+  write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Cleaning old backups"
   clean_old_backups
 
   # Logout
+  write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Logout"
   unifi_logout
 
 }
@@ -132,12 +140,12 @@ function backup_controller {
 
   source ${1}
 
-  write_log "Finding it sites for ${BOLD}${UNIFI_HOSTNAME}${NORM}"
+  write_log "Finding it sites for ${UNIFI_HOSTNAME}"
   # Backup every site on the controller
   for site in ${SITES}; do
-    write_log "Hostname: ${BOLD}${UNIFI_HOSTNAME}${NORM}, Site: ${BOLD}${site}${NORM} -> Starting"
+    write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Starting"
     backup_site ${site}
-    write_log "Hostname: ${BOLD}${UNIFI_HOSTNAME}${NORM}, Site: ${BOLD}${site}${NORM} -> Finished"
+    write_log "Hostname: ${UNIFI_HOSTNAME}, Site: ${site} -> Finished"
   done
 
 }
@@ -149,9 +157,9 @@ function main {
   source ${CONFIG_FILE}
   # Backup every Unifi Controller
   for CONTROLLER in ${CONTROLLERS}; do
-    write_log "Starting backup from the file ${BOLD}${CONTROLLER}${NORM}"
+    write_log "Starting backup from the file ${CONTROLLER}"
     backup_controller ${CONTROLLER}
-    write_log "Finished backup from the file ${BOLD}${CONTROLLER}${NORM}"
+    write_log "Finished backup from the file ${CONTROLLER}"
   done
 }
 
