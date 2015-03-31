@@ -8,7 +8,7 @@
 
  
 VERSION=0.2
-SCRIPT=(basename $"BASH_SOURCE[0]")
+SCRIPT=$(basename $"BASH_SOURCE[0]")
 LONG_NAME="Unifi Controller Backup"
 
 # Default options
